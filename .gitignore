@@ -1,0 +1,33 @@
+
+# ===== Flutter =====
+build/
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+.flutter-plugins
+.flutter-plugins-dependencies
+ios/Pods/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+android/.gradle/
+android/app/build/
+
+# ===== Python =====
+__pycache__/
+*.pyc
+.venv/
+env/
+venv/
+
+# ===== Secrets =====
+.env
+*.p8
+*.pem
+*.key
+
+# ===== OS / IDE =====
+.DS_Store
+.idea/
+.vscode/
+*.iml
