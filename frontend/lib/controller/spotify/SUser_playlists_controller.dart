@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import '../models/all_playlists.dart';
+import '../../models/spotify/SListPlaylists.dart';
 
 class PlaylistsController extends GetxController {
   RxList<PlaylistItem> _allPlaylists = <PlaylistItem>[].obs;

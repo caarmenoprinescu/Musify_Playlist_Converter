@@ -1,12 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import '../models/all_playlists.dart';
-import '../models/playlist.dart';
+import '../models/spotify/SListPlaylists.dart';
+import '../models/spotify/SPlaylist.dart';
 
 class SpotifyService {
-  final String backendBaseUrl = "http://127.0.0.1:5000";
-
+  final String backendBaseUrl = "http://192.168.0.118:5000";
   String? accessToken;
   String? refreshToken;
 
@@ -31,23 +30,29 @@ class SpotifyService {
       headers: {"Authorization": "Bearer $accessToken"},
     );
 
-    if (response.statusCode == 200){
+    if (response.statusCode == 200) {
       var responseBodyofGetCurrentUserPlaylists = jsonDecode(response.body);
-      (responseBodyofGetCurrentUserPlaylists['items'] as List).forEach((eachPlaylist){
-        playlistsCurrentUser.add(PlaylistItem.fromJson(eachPlaylist),);
+      (responseBodyofGetCurrentUserPlaylists['items'] as List).forEach((
+        eachPlaylist,
+      ) {
+        playlistsCurrentUser.add(PlaylistItem.fromJson(eachPlaylist));
       });
 
       return playlistsCurrentUser;
     }
-
   }
 
-   Future<Playlist> getEachPlaylist(String id) async {
+  Future<Playlist> getPlaylistByID(String id) async {
     final response = await http.get(
       Uri.parse("$backendBaseUrl/spotify/playlists/$id"),
       headers: {"Authorization": "Bearer $accessToken"},
     );
 
-    return Playlist.fromJson (jsonDecode(response.body));
+    if (response.statusCode != 200) {
+      throw Exception("Failed to fetch playlist $id");
+    }
+
+    final data = jsonDecode(response.body);
+    return Playlist.fromJson(data);
   }
 }
