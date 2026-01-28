@@ -4,66 +4,16 @@ import requests
 import os
 from dotenv import load_dotenv
 import base64
-# from apple_music import (
-#     generate_developer_token,
-#     search_song_in_catalog,
-#     create_playlist,
-#     add_tracks_to_playlist,
-# )
+from apple_music import (
+
+  generate_token_apple, search_apple_song, create_apple_playlist, add_tracks_to_apple_playlist,
+)
 load_dotenv()
 
 app = Flask(__name__)
-
 CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
 CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
 REDIRECT_URI = os.getenv("SPOTIFY_REDIRECT_URI")
-#generate_developer_token()
-@app.route("/login")
-def login():
-    scope = "playlist-read-private playlist-modify-private user-read-email user-read-private"
-
-    auth_url = (
-        "https://accounts.spotify.com/authorize"
-        f"?client_id={CLIENT_ID}"
-        "&response_type=code"
-        f"&redirect_uri={REDIRECT_URI}"
-        f"&scope={scope}"
-    )
-
-    return redirect(auth_url)
-
-
-@app.route("/callback")
-def callback():
-    code = request.args.get("code")
-    if not code:
-        return "Error: No code provided", 400
-
-    token_url = "https://accounts.spotify.com/api/token"
-    headers = {"Content-Type": "application/x-www-form-urlencoded"}
-    data = {
-        "grant_type": "authorization_code",
-        "code": code,
-        "redirect_uri": REDIRECT_URI,
-        "client_id": CLIENT_ID,
-        "client_secret": CLIENT_SECRET
-    }
-
-    response = requests.post(token_url, headers=headers, data=data)
-    if response.status_code != 200:
-        return jsonify({"error": response.text}), 400
-
-    token_data = response.json()
-    access_token = token_data.get("access_token")
-    refresh_token = token_data.get("refresh_token")
-
-    if not access_token or not refresh_token:
-        return jsonify({"error": "Missing tokens"}), 400
-
-    # Redirect back to Flutter via custom scheme
-    return redirect(
-        f"musify://callback?access_token={access_token}&refresh_token={refresh_token}"
-    )
 
 
 @app.route("/spotify/refresh", methods=["POST"])
@@ -122,13 +72,30 @@ def spotify_each_playlist(playlist_id):
   url = f"https://api.spotify.com/v1/playlists/{playlist_id}"
 
   r = requests.get(url, headers={"Authorization": f"Bearer {token}"})
-
-  return jsonify(r.json())
-
+  return jsonify(r.json()), r.status_code
 
 
-# next - apple music logic
 
+@app.route("/apple/developer-token")
+def apple_developer_token():
+    token = generate_token_apple()
+    return jsonify({"developerToken": token})
+
+
+@app.route("/apple/search", methods=["GET"])
+def search_songs():
+  response, status = search_apple_song()
+  return jsonify(response), status
+
+@app.route("/apple/create-playlist", methods=["POST"])
+def create_playlist():
+    data, status = create_apple_playlist()
+    return jsonify(data), status
+
+@app.route("/apple/add-tracks", methods=["POST"])
+def add_tracks_to_playlist():
+    data, status = add_tracks_to_apple_playlist()
+    return jsonify(data), status
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
