@@ -1,27 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:musify/models/spotify/SListPlaylists.dart';
-import '../../controller/spotify/SUser_playlists_controller.dart';
-import '../../services/spotify_service.dart';
-import 'converting_to_apple_screen.dart';
+import '../../controller/appleMusic/AUser_playlists_controller.dart';
+import '../../models/AppleMusic/AMPlaylist.dart';
+import '../../services/apple_music_service.dart';
 
-class SpotifyPlaylistScreen extends StatefulWidget {
-  final String accessToken;
-  final String refreshToken;
-
-  const SpotifyPlaylistScreen({
-    super.key,
-    required this.accessToken,
-    required this.refreshToken,
-  });
+class ApplePlaylistScreen extends StatefulWidget {
+  const ApplePlaylistScreen({super.key});
 
   @override
-  State<SpotifyPlaylistScreen> createState() => _SpotifyPlaylistScreenState();
+  State<ApplePlaylistScreen> createState() => _ApplePlaylistScreenState();
 }
 
-class _SpotifyPlaylistScreenState extends State<SpotifyPlaylistScreen> {
-  final allPlaylistsController = Get.put(SpotifyPlaylistsController());
-  final spotify = Get.put(SpotifyService(), permanent: true);
+class _ApplePlaylistScreenState extends State<ApplePlaylistScreen> {
+  final ApplePlaylistsController allPlaylistsController = Get.put(
+    ApplePlaylistsController(),
+  );
+  final AppleMusicService apple = Get.put(AppleMusicService(), permanent: true);
+
+  late String developerToken;
+  late String userToken;
 
   @override
   void initState() {
@@ -30,14 +27,56 @@ class _SpotifyPlaylistScreenState extends State<SpotifyPlaylistScreen> {
   }
 
   void _loadData() async {
-    spotify.setTokens(widget.accessToken, widget.refreshToken);
+    try {
+      developerToken = await AppleMusicService.fetchDeveloperToken() ?? '';
+      final auth = await AppleMusicService.requestAuthorization();
+      userToken = await AppleMusicService.getUserToken(developerToken) ?? '';
 
-    final myPlaylists = await spotify.getCurrentUsersPlaylists();
+      if (developerToken.isEmpty || userToken.isEmpty || auth != 'authorized')
+        return;
 
-    allPlaylistsController.setList(myPlaylists);
+      final playlistIDs = await apple.getCurrentUsersPlaylists(
+        developerToken: developerToken,
+        userToken: userToken,
+      );
+
+      if (playlistIDs.isEmpty) {
+        allPlaylistsController.setList([]);
+        return;
+      }
+
+      final List<Future<LibraryPlaylist?>> detailFutures = playlistIDs
+          .map<Future<LibraryPlaylist?>>((id) async {
+            try {
+              return await getPlaylistByID(id.toString());
+            } catch (e) {
+              print("Error playlist $id: $e");
+              return null;
+            }
+          })
+          .toList();
+
+      final results = await Future.wait(detailFutures);
+
+      final List<LibraryPlaylist> validPlaylists = results
+          .where((p) => p != null)
+          .cast<LibraryPlaylist>()
+          .toList();
+
+      allPlaylistsController.setList(validPlaylists);
+    } catch (e) {
+      print("ERROR: $e");
+    }
   }
 
-  @override
+  Future<LibraryPlaylist> getPlaylistByID(String id) async {
+    return await apple.getPlaylist(
+      developerToken: developerToken,
+      userToken: userToken,
+      playlistID: id,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,6 +153,7 @@ class _SpotifyPlaylistScreenState extends State<SpotifyPlaylistScreen> {
                               itemBuilder: (context, index) {
                                 final pl =
                                     allPlaylistsController.allPlaylists[index];
+
                                 return _PlaylistTile(playlist: pl);
                               },
                             ),
@@ -162,7 +202,8 @@ class _SpotifyPlaylistScreenState extends State<SpotifyPlaylistScreen> {
             borderRadius: BorderRadius.circular(25),
           ),
         ),
-        onPressed: () => Get.to(() => AppleMusicConvertScreen()),
+        onPressed: () => Get.to(() => ()),
+
         child: const Text(
           "Next Step",
           style: TextStyle(
@@ -177,113 +218,103 @@ class _SpotifyPlaylistScreenState extends State<SpotifyPlaylistScreen> {
 }
 
 class _PlaylistTile extends StatelessWidget {
-  final PlaylistItem playlist;
+  final LibraryPlaylist playlist;
 
   const _PlaylistTile({required this.playlist});
 
   @override
   Widget build(BuildContext context) {
-    final allPlaylistsController = Get.find<SpotifyPlaylistsController>();
-    final imageUrl = playlist.images.isNotEmpty ? playlist.images[0].url : "";
+    final allPlaylistsController = Get.find<ApplePlaylistsController>();
+    final artwork = playlist.attributes.artwork;
+    String imageUrl = "";
 
-    return GetBuilder<SpotifyPlaylistsController>(
-      builder: (_) {
-        final isSelected = allPlaylistsController.selectedItemList.contains(
-          playlist.id,
-        );
+    if (artwork != null && artwork.url != null) {
+      imageUrl = artwork.url!.replaceAll("{w}", "300").replaceAll("{h}", "300");
+    }
+    return Obx(() {
+      final isSelected = allPlaylistsController.selectedItemList.contains(
+        playlist.id,
+      );
 
-        return GestureDetector(
-          onTap: () {
-            final id = playlist.id;
-            if (isSelected) {
-              allPlaylistsController.deleteSelectedItem(id);
-            } else {
-              allPlaylistsController.addSelectedItem(id);
-            }
-          },
-          child: Container(
-            height: 95,
-            margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: isSelected
-                    ? const Color(0xFF537CFF)
-                    : Colors.transparent,
-                width: 2,
+      return GestureDetector(
+        onTap: () {
+          if (isSelected) {
+            allPlaylistsController.deleteSelectedItem(playlist.id);
+          } else {
+            allPlaylistsController.addSelectedItem(playlist.id);
+          }
+        },
+        child: Container(
+          height: 95,
+          margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: isSelected ? const Color(0xFF537CFF) : Colors.transparent,
+              width: 2,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: 15,
+                offset: const Offset(0, 5),
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 15,
-                  offset: const Offset(0, 5),
-                ),
-              ],
-            ),
-            child: Row(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: imageUrl.isNotEmpty
-                      ? Image.network(
-                          imageUrl,
-                          width: 65,
-                          height: 65,
-                          fit: BoxFit.cover,
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return _buildPlaceholder();
-                          },
-                          errorBuilder: (c, e, s) => _buildPlaceholder(),
-                        )
-                      : _buildPlaceholder(),
-                ),
-
-                const SizedBox(width: 15),
-
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        playlist.name,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                          color: Color(0xFF0D1B3E),
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        "${playlist.tracks.total} SONGS",
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w600,
-                          color: const Color(0xFF537CFF).withValues(alpha: 0.6),
-                          letterSpacing: 1.2,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                if (isSelected)
-                  const Icon(
-                    Icons.check_circle_rounded,
-                    color: Color(0xFF537CFF),
-                    size: 24,
-                  ),
-              ],
-            ),
+            ],
           ),
-        );
-      },
-    );
+          child: Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: imageUrl.isNotEmpty
+                    ? Image.network(
+                        imageUrl,
+                        width: 65,
+                        height: 65,
+                        fit: BoxFit.cover,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return _buildPlaceholder();
+                        },
+                        errorBuilder: (c, e, s) => _buildPlaceholder(),
+                      )
+                    : _buildPlaceholder(),
+              ),
+
+              const SizedBox(width: 15),
+
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      playlist.attributes.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                        color: Color(0xFF0D1B3E),
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                  ],
+                ),
+              ),
+
+              if (isSelected)
+                const Icon(
+                  Icons.check_circle_rounded,
+                  color: Color(0xFF537CFF),
+                  size: 24,
+                ),
+            ],
+          ),
+        ),
+      );
+    });
   }
 
   Widget _buildPlaceholder() {

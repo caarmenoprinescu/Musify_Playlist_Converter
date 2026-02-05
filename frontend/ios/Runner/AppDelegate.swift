@@ -10,7 +10,6 @@ import MusicKit
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
 
-    // Inițializează FlutterMethodChannel
     let controller: FlutterViewController = window?.rootViewController as! FlutterViewController
     let channel = FlutterMethodChannel(name: "apple_music_auth", binaryMessenger: controller.binaryMessenger)
 
@@ -26,7 +25,7 @@ import MusicKit
         self.getAppleMusicUserToken(developerToken: developerToken, result: result)
       } else if call.method == "checkAppleMusicSubscription" {
           self.checkAppleMusicSubscription(result: result)
-      }else {
+      } else {
         result(FlutterMethodNotImplemented)
       }
     }
@@ -71,7 +70,8 @@ import MusicKit
                     for: developerToken,
                     options: []
                 )
-                result(userToken)
+               
+               result(userToken)
             } catch {
                 result(FlutterError(
                     code: "USER_TOKEN_ERROR",
@@ -99,4 +99,5 @@ import MusicKit
             }
         }
     }
+    
 }

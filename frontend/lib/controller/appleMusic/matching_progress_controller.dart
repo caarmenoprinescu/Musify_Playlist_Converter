@@ -6,6 +6,7 @@ class ConvertProgressController extends GetxController {
   final progress = 0.0.obs;
   final statusText = "Waiting…".obs;
   var matches = <AppleMusicMatch>[].obs;
+
   void setRunning(String text) {
     statusText.value = text;
   }

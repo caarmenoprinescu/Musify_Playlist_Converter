@@ -20,7 +20,7 @@ class AppleMusicConvertScreen extends StatefulWidget {
 
 class _AppleMusicConvertScreenState extends State<AppleMusicConvertScreen> {
   late final convertController = Get.put(ConvertController());
-  final playlistsToConvert = Get.find<PlaylistsController>();
+  final playlistsToConvert = Get.find<SpotifyPlaylistsController>();
   final spotify = Get.find<SpotifyService>();
   late final flowController = Get.put(
     AppleConvertFlowController(
@@ -88,7 +88,9 @@ class _AppleMusicConvertScreenState extends State<AppleMusicConvertScreen> {
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w800,
-                            color: const Color(0xFF537CFF).withOpacity(0.7),
+                            color: const Color(
+                              0xFF537CFF,
+                            ).withValues(alpha: 0.7),
                             letterSpacing: 2.0,
                           ),
                         ),
@@ -150,7 +152,7 @@ class _AppleMusicConvertScreenState extends State<AppleMusicConvertScreen> {
                                     BoxShadow(
                                       color: const Color(
                                         0xFF537CFF,
-                                      ).withOpacity(0.3),
+                                      ).withValues(alpha: 0.3),
                                       blurRadius: 20,
                                       offset: const Offset(0, 10),
                                     ),
@@ -199,7 +201,7 @@ class _AppleMusicConvertScreenState extends State<AppleMusicConvertScreen> {
         borderRadius: BorderRadius.circular(25),
         boxShadow: [
           BoxShadow(
-            color: Colors.green.withOpacity(0.2),
+            color: Colors.green.withValues(alpha: 0.2),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -231,7 +233,7 @@ class _AppleMusicConvertScreenState extends State<AppleMusicConvertScreen> {
   void _showExitDialog() {
     Get.dialog(
       AlertDialog(
-        backgroundColor: Colors.white.withOpacity(0.9),
+        backgroundColor: Colors.white.withValues(alpha: 0.9),
         surfaceTintColor: Colors.transparent,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(35)),
         title: Column(
@@ -294,7 +296,7 @@ class _AppleMusicConvertScreenState extends State<AppleMusicConvertScreen> {
         ],
       ),
       barrierDismissible: false,
-      barrierColor: const Color(0xFF0D1B3E).withOpacity(0.4),
+      barrierColor: const Color(0xFF0D1B3E).withValues(alpha: 0.4),
     );
   }
 }
@@ -317,7 +319,7 @@ class _PlaylistTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -392,7 +394,9 @@ class _PlaylistTile extends StatelessWidget {
                     child: LinearProgressIndicator(
                       value: progress.progress.value,
                       minHeight: 6,
-                      backgroundColor: const Color(0xFF537CFF).withOpacity(0.1),
+                      backgroundColor: const Color(
+                        0xFF537CFF,
+                      ).withValues(alpha: 0.1),
                       valueColor: const AlwaysStoppedAnimation<Color>(
                         Color(0xFF537CFF),
                       ),
@@ -416,7 +420,7 @@ class _PlaylistTile extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 16),
       decoration: BoxDecoration(
-        color: Colors.greenAccent.withOpacity(0.1),
+        color: Colors.greenAccent.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(15),
       ),
       child: const Row(
@@ -443,7 +447,7 @@ class _PlaylistTile extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFF537CFF).withOpacity(0.04),
+        color: const Color(0xFF537CFF).withValues(alpha: 0.04),
         borderRadius: BorderRadius.circular(15),
       ),
       child: Column(
@@ -479,7 +483,7 @@ class _PlaylistTile extends StatelessWidget {
     return Container(
       width: 60,
       height: 60,
-      color: const Color(0xFF537CFF).withOpacity(0.1),
+      color: const Color(0xFF537CFF).withValues(alpha: 0.1),
       child: const Icon(Icons.music_note, color: Color(0xFF537CFF)),
     );
   }

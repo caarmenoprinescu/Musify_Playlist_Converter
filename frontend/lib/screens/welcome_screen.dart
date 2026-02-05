@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:playlist_converter_app/authentication/spotify_login_screen.dart';
+import 'package:musify/authentication/spotify_login_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -51,7 +51,7 @@ class WelcomeScreen extends StatelessWidget {
                     "The smartest way to move your\nmusic library between platforms.",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: const Color(0xFF537CFF).withOpacity(0.7),
+                      color: const Color(0xFF537CFF).withValues(alpha: 0.7),
                       fontSize: 16,
                       fontWeight: FontWeight.w300,
                       height: 1.4,
@@ -83,7 +83,7 @@ class WelcomeScreen extends StatelessWidget {
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF537CFF).withOpacity(0.3),
+                color: const Color(0xFF537CFF).withValues(alpha: 0.3),
                 blurRadius: 50,
                 spreadRadius: 10,
               ),
@@ -97,7 +97,7 @@ class WelcomeScreen extends StatelessWidget {
           color: const Color(0xFF537CFF),
           shadows: [
             Shadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               offset: const Offset(0, 10),
               blurRadius: 15,
             ),
@@ -118,7 +118,7 @@ class WelcomeScreen extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF537CFF).withOpacity(0.3),
+            color: const Color(0xFF537CFF).withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -162,7 +162,7 @@ class WelcomeScreen extends StatelessWidget {
 //OLD VERSION
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
-// import 'package:playlist_converter_app/authentication/spotify_login_screen.dart';
+// import 'package:musify/authentication/spotify_login_screen.dart';
 //
 // class WelcomeScreen extends StatelessWidget {
 //   const WelcomeScreen({super.key});

@@ -33,7 +33,8 @@ class Playlist {
     List<Image> parsedImages = [];
     if (json['images'] != null) {
       parsedImages = List<Image>.from(
-          json['images'].map((i) => Image.fromJson(i)));
+        json['images'].map((i) => Image.fromJson(i)),
+      );
     }
 
     Tracks? parsedTracks;
@@ -124,8 +125,7 @@ class Owner {
   });
 
   factory Owner.fromJson(Map<String, dynamic> json) => Owner(
-    externalUrls:
-    ExternalUrls.fromJson(json['external_urls'] ?? {}),
+    externalUrls: ExternalUrls.fromJson(json['external_urls'] ?? {}),
     href: json['href'] ?? "",
     id: json['id'] ?? "",
     type: json['type'] ?? "",
@@ -214,9 +214,7 @@ class TrackItem {
         ? AddedBy.fromJson(json['added_by'])
         : null,
     isLocal: json['is_local'] ?? false,
-    track: json['track'] != null
-        ? Track.fromJson(json['track'])
-        : null,
+    track: json['track'] != null ? Track.fromJson(json['track']) : null,
   );
 
   Map<String, dynamic> toJson() => {
@@ -243,8 +241,7 @@ class AddedBy {
   });
 
   factory AddedBy.fromJson(Map<String, dynamic> json) => AddedBy(
-    externalUrls:
-    ExternalUrls.fromJson(json['external_urls'] ?? {}),
+    externalUrls: ExternalUrls.fromJson(json['external_urls'] ?? {}),
     href: json['href'] ?? "",
     id: json['id'] ?? "",
     type: json['type'] ?? "",
@@ -306,12 +303,9 @@ class Track {
   });
 
   factory Track.fromJson(Map<String, dynamic> json) => Track(
-    album: json['album'] != null
-        ? Album.fromJson(json['album'])
-        : null,
+    album: json['album'] != null ? Album.fromJson(json['album']) : null,
     artists: json['artists'] != null
-        ? List<Artist>.from(
-        json['artists'].map((x) => Artist.fromJson(x)))
+        ? List<Artist>.from(json['artists'].map((x) => Artist.fromJson(x)))
         : [],
     availableMarkets: json['available_markets'] != null
         ? List<String>.from(json['available_markets'])
@@ -408,8 +402,7 @@ class Album {
     href: json['href'] ?? "",
     id: json['id'] ?? "",
     images: json['images'] != null
-        ? List<Image>.from(
-        json['images'].map((x) => Image.fromJson(x)))
+        ? List<Image>.from(json['images'].map((x) => Image.fromJson(x)))
         : [],
     name: json['name'] ?? "",
     releaseDate: json['release_date'],
@@ -420,8 +413,7 @@ class Album {
     type: json['type'] ?? "",
     uri: json['uri'] ?? "",
     artists: json['artists'] != null
-        ? List<Artist>.from(
-        json['artists'].map((x) => Artist.fromJson(x)))
+        ? List<Artist>.from(json['artists'].map((x) => Artist.fromJson(x)))
         : [],
   );
 
@@ -461,8 +453,7 @@ class Artist {
   });
 
   factory Artist.fromJson(Map<String, dynamic> json) => Artist(
-    externalUrls:
-    ExternalUrls.fromJson(json['external_urls'] ?? {}),
+    externalUrls: ExternalUrls.fromJson(json['external_urls'] ?? {}),
     href: json['href'] ?? "",
     id: json['id'] ?? "",
     name: json['name'] ?? "",
@@ -487,14 +478,10 @@ class ExternalIds {
 
   ExternalIds({this.isrc, this.ean, this.upc});
 
-  factory ExternalIds.fromJson(Map<String, dynamic> json) => ExternalIds(
-    isrc: json['isrc'],
-    ean: json['ean'],
-    upc: json['upc'],
-  );
+  factory ExternalIds.fromJson(Map<String, dynamic> json) =>
+      ExternalIds(isrc: json['isrc'], ean: json['ean'], upc: json['upc']);
 
-  Map<String, dynamic> toJson() =>
-      {'isrc': isrc, 'ean': ean, 'upc': upc};
+  Map<String, dynamic> toJson() => {'isrc': isrc, 'ean': ean, 'upc': upc};
 }
 
 class Restrictions {

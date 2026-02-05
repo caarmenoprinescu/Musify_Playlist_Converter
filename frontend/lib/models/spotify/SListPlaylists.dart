@@ -27,8 +27,8 @@ class AllPlaylists {
     items: json['items'] == null
         ? []
         : List<PlaylistItem>.from(
-      (json['items'] as List).map((x) => PlaylistItem.fromJson(x)),
-    ),
+            (json['items'] as List).map((x) => PlaylistItem.fromJson(x)),
+          ),
   );
 
   Map<String, dynamic> toJson() => {
@@ -76,22 +76,21 @@ class PlaylistItem {
   factory PlaylistItem.fromJson(Map<String, dynamic> json) => PlaylistItem(
     collaborative: json['collaborative'] ?? false,
     description: json['description'] ?? '',
-    externalUrls:
-    ExternalUrls.fromJson(json['external_urls'] ?? <String, dynamic>{}),
+    externalUrls: ExternalUrls.fromJson(
+      json['external_urls'] ?? <String, dynamic>{},
+    ),
     href: json['href'] ?? '',
     id: json['id'] ?? '',
     images: json['images'] == null
         ? []
         : List<ImageData>.from(
-      (json['images'] as List)
-          .map((x) => ImageData.fromJson(x)),
-    ),
+            (json['images'] as List).map((x) => ImageData.fromJson(x)),
+          ),
     name: json['name'] ?? '',
     owner: Owner.fromJson(json['owner'] ?? <String, dynamic>{}),
     public: json['public'] ?? false,
     snapshotId: json['snapshot_id'] ?? '',
-    tracks:
-    SimpleTracks.fromJson(json['tracks'] ?? <String, dynamic>{}),
+    tracks: SimpleTracks.fromJson(json['tracks'] ?? <String, dynamic>{}),
     type: json['type'] ?? '',
     uri: json['uri'] ?? '',
   );
@@ -118,13 +117,10 @@ class ExternalUrls {
 
   ExternalUrls({required this.spotify});
 
-  factory ExternalUrls.fromJson(Map<String, dynamic> json) => ExternalUrls(
-    spotify: json['spotify'] ?? '',
-  );
+  factory ExternalUrls.fromJson(Map<String, dynamic> json) =>
+      ExternalUrls(spotify: json['spotify'] ?? '');
 
-  Map<String, dynamic> toJson() => {
-    'spotify': spotify,
-  };
+  Map<String, dynamic> toJson() => {'spotify': spotify};
 }
 
 class ImageData {
@@ -165,8 +161,9 @@ class Owner {
   });
 
   factory Owner.fromJson(Map<String, dynamic> json) => Owner(
-    externalUrls:
-    ExternalUrls.fromJson(json['external_urls'] ?? <String, dynamic>{}),
+    externalUrls: ExternalUrls.fromJson(
+      json['external_urls'] ?? <String, dynamic>{},
+    ),
     href: json['href'] ?? '',
     id: json['id'] ?? '',
     type: json['type'] ?? '',
@@ -190,13 +187,8 @@ class SimpleTracks {
 
   SimpleTracks({required this.href, required this.total});
 
-  factory SimpleTracks.fromJson(Map<String, dynamic> json) => SimpleTracks(
-    href: json['href'] ?? '',
-    total: json['total'] ?? 0,
-  );
+  factory SimpleTracks.fromJson(Map<String, dynamic> json) =>
+      SimpleTracks(href: json['href'] ?? '', total: json['total'] ?? 0);
 
-  Map<String, dynamic> toJson() => {
-    'href': href,
-    'total': total,
-  };
+  Map<String, dynamic> toJson() => {'href': href, 'total': total};
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import '../models/AppleMusic/AMPlaylist.dart';
 
 class AppleMusicService {
   static const MethodChannel _channel = MethodChannel('apple_music_auth');
@@ -44,7 +45,8 @@ class AppleMusicService {
   }
 
   static Future<String?> fetchDeveloperToken() async {
-    const String backendUrl = 'http://192.168.0.118:5000/apple/developer-token';
+    const String backendUrl =
+        'http:'; // ip address:5000/apple/developer-token';
 
     try {
       final response = await http.get(Uri.parse(backendUrl));
@@ -64,7 +66,7 @@ class AppleMusicService {
     required List<String> terms,
     required String developerToken,
   }) async {
-    const String baseUrl = 'http://192.168.0.118:5000';
+    const String baseUrl = 'http:'; // ip address:5000';
 
     final uri = Uri.parse(
       '$baseUrl/apple/search',
@@ -94,7 +96,7 @@ class AppleMusicService {
     required String developerToken,
     required String userToken,
   }) async {
-    const String baseUrl = 'http://192.168.0.118:5000';
+    const String baseUrl = 'http:'; // ip address:5000';
     final uri = Uri.parse('$baseUrl/apple/create-playlist');
     try {
       final response = await http.post(
@@ -134,7 +136,7 @@ class AppleMusicService {
     required String developerToken,
     required String userToken,
   }) async {
-    const String baseUrl = 'http://192.168.0.118:5000';
+    const String baseUrl = 'http:'; // ip address:5000';
     final uri = Uri.parse('$baseUrl/apple/add-tracks');
     try {
       final response = await http.post(
@@ -166,7 +168,7 @@ class AppleMusicService {
     required String developerToken,
     required String userToken,
   }) async {
-    const String baseUrl = 'http://192.168.0.118:5000';
+    const String baseUrl = 'http:'; // ip address:5000';
     final uri = Uri.parse('$baseUrl/apple/add-tracks');
 
     try {
@@ -189,6 +191,79 @@ class AppleMusicService {
       }
     } catch (e) {
       print('Error adding songs to Apple Music playlist: $e');
+      rethrow;
+    }
+  }
+
+  getCurrentUsersPlaylists({
+    required String developerToken,
+    required String userToken,
+  }) async {
+    const String baseUrl = 'http:'; // ip address:5000';
+    final uri = Uri.parse('$baseUrl/apple/get-playlists');
+    try {
+      final response = await http.get(
+        uri,
+        headers: {
+          'Authorization': 'Bearer $developerToken',
+          'Music-User-Token': userToken,
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception(
+          'Apple Music playlists getting failed: '
+          '${response.statusCode} ${response.body}',
+        );
+      }
+      final decoded = jsonDecode(response.body);
+
+      List<String> playlistIDs = [];
+
+      final playlists = decoded['playlists'];
+
+      for (var playlist in playlists) {
+        playlistIDs.add(playlist['id']);
+      }
+      return playlistIDs;
+    } catch (e) {
+      print(' Error getting Apple Music playlists: $e');
+      rethrow;
+    }
+  }
+
+  Future<LibraryPlaylist> getPlaylist({
+    required String developerToken,
+    required String userToken,
+    required String playlistID,
+  }) async {
+    const String baseUrl = 'http:'; // ip address:5000';
+    final uri = Uri.parse('$baseUrl/apple/get-playlist-details/$playlistID');
+    try {
+      final response = await http.get(
+        uri,
+        headers: {
+          'Authorization': 'Bearer $developerToken',
+          'Music-User-Token': userToken,
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception(
+          'Apple Music playlist getting failed: '
+          '${response.statusCode} ${response.body}',
+        );
+      }
+
+      final decoded = jsonDecode(response.body);
+      final playlistData = decoded['data'][0];
+
+      final playlist = LibraryPlaylist.fromJson(playlistData);
+      return playlist;
+    } catch (e) {
+      print(' Error getting Apple Music playlist details: $e');
       rethrow;
     }
   }

@@ -2,13 +2,14 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:http/http.dart' as http;
-import 'package:playlist_converter_app/screens/spotify-apple/select_to_convert_spotify.dart';
-import 'package:playlist_converter_app/utils/pkce.dart';
+import 'package:musify/screens/spotify-apple/select_to_convert_spotify.dart';
+import 'package:musify/utils/pkce.dart';
+
+import '../screens/apple-spotify/select_to_convert_apple.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -95,8 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void loginWithApple() async {
-    // Placeholder – next to implement
-    Fluttertoast.showToast(msg: "Apple Music login not implemented yet.");
+    Get.off(() => ApplePlaylistScreen());
   }
 
   void _showGlobalInfo(BuildContext context) {
@@ -113,7 +113,6 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-
             Container(
               width: 40,
               height: 5,
@@ -127,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.blue.withOpacity(0.1),
+                color: Colors.blue.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
@@ -244,11 +243,11 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-
           Container(
             width: double.infinity,
             height: double.infinity,
@@ -264,7 +263,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const SizedBox(height: 60),
-
 
                   Column(
                     children: [
@@ -295,9 +293,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   _buildOptionCard(
                     context,
                     leftLabel: "Spotify",
-                    leftImg: "images/spotify_logo.png",
+                    leftImg: "images2/spotify_logo.png",
                     rightLabel: "Apple Music",
-                    rightImg: "images/Apple_Music_icon.png",
+                    rightImg: "images2/Apple_Music_icon.png",
+                    onTap: loginWithSpotify,
+                    isAvailable: true,
                   ),
 
                   const SizedBox(height: 20),
@@ -305,9 +305,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   _buildOptionCard(
                     context,
                     leftLabel: "Apple Music",
-                    leftImg: "images/Apple_Music_icon.png",
+                    leftImg: "images2/Apple_Music_icon.png",
                     rightLabel: "Spotify",
-                    rightImg: "images/spotify_logo.png",
+                    rightImg: "images2/spotify_logo.png",
+                    onTap: loginWithApple,
+                    isAvailable: true,
                   ),
 
                   const Spacer(),
@@ -315,7 +317,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     padding: const EdgeInsets.all(20),
                     margin: const EdgeInsets.only(bottom: 40),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.5),
+                      color: Colors.white.withValues(alpha: 0.5),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Column(
@@ -326,10 +328,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
-                              color: Colors.white.withOpacity(0.3),
+                              color: Colors.white.withValues(alpha: 0.3),
                             ),
                           ),
                           child: const Text(
@@ -365,7 +367,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         Container(
                           height: 1,
                           width: 50,
-                          color: const Color(0xFF537CFF).withOpacity(0.2),
+                          color: const Color(0xFF537CFF).withValues(alpha: 0.2),
                         ),
                         const SizedBox(height: 20),
 
@@ -407,10 +409,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Container(
                     padding: const EdgeInsets.all(7),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.1),
+                      color: Colors.white.withValues(alpha: 0.1),
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: Colors.white.withOpacity(0.1),
+                        color: Colors.white.withValues(alpha: 0.1),
                       ),
                     ),
                     child: const Icon(
@@ -434,15 +436,17 @@ class _LoginScreenState extends State<LoginScreen> {
     required String leftImg,
     required String rightLabel,
     required String rightImg,
+    required VoidCallback onTap,
+    bool isAvailable = true,
   }) {
     return Stack(
+      clipBehavior: Clip.none,
       children: [
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 20),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(30),
-
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withAlpha(20),
@@ -454,34 +458,62 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Material(
             color: Colors.transparent,
             child: InkWell(
-              onTap: loginWithSpotify,
+              onTap: isAvailable ? onTap : null,
               borderRadius: BorderRadius.circular(30),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 25,
-                  horizontal: 15,
-                ),
-                child: Row(
-                  children: [
-                    Expanded(child: _buildPlatformBox(leftLabel, leftImg)),
-
-                    Container(
-                      padding: const EdgeInsets.all(8),
-
-                      child: Icon(
-                        Icons.swap_horiz_rounded,
-                        color: const Color(0xFF537CFF),
-                        size: 32,
+              child: Opacity(
+                opacity: isAvailable ? 1.0 : 0.6,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 25,
+                    horizontal: 15,
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(child: _buildPlatformBox(leftLabel, leftImg)),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        child: Icon(
+                          Icons.swap_horiz_rounded,
+                          color: const Color(0xFF537CFF),
+                          size: 26,
+                        ),
                       ),
-                    ),
-
-                    Expanded(child: _buildPlatformBox(rightLabel, rightImg)),
-                  ],
+                      Expanded(child: _buildPlatformBox(rightLabel, rightImg)),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
         ),
+        if (!isAvailable)
+          Positioned(
+            top: -10,
+            right: 35,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: const Color(0xFF537CFF),
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF537CFF).withValues(alpha: 0.3),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: const Text(
+                "AVAILABLE SOON",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 9,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1.2,
+                ),
+              ),
+            ),
+          ),
       ],
     );
   }
@@ -499,8 +531,11 @@ class _LoginScreenState extends State<LoginScreen> {
           Image.asset(
             asset,
             height: 33,
-            errorBuilder: (context, e, s) =>
-                const Icon(Icons.music_note, size: 22),
+            errorBuilder: (context, e, s) => const Icon(
+              Icons.music_note,
+              color: Color(0xFF537CFF),
+              size: 22,
+            ),
           ),
           const SizedBox(width: 8),
           Flexible(
@@ -519,31 +554,5 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildInfoRow(IconData icon, String title, String desc) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Icon(icon, color: Colors.blueAccent, size: 28),
-        const SizedBox(width: 15),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-              Text(
-                desc,
-                style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
+
 }

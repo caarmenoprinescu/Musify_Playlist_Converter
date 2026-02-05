@@ -7,10 +7,7 @@ String generateCodeVerifier() {
   const chars =
       'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
   final rand = Random.secure();
-  return List.generate(
-    length,
-        (_) => chars[rand.nextInt(chars.length)],
-  ).join();
+  return List.generate(length, (_) => chars[rand.nextInt(chars.length)]).join();
 }
 
 String generateCodeChallenge(String verifier) {

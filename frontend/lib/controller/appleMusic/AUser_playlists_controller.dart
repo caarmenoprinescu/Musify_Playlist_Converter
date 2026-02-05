@@ -1,29 +1,28 @@
 import 'package:get/get.dart';
-import '../../models/spotify/SListPlaylists.dart';
 
-class SpotifyPlaylistsController extends GetxController {
-  RxList<PlaylistItem> _allPlaylists = <PlaylistItem>[].obs;
+import '../../models/AppleMusic/AMPlaylist.dart';
+
+class ApplePlaylistsController extends GetxController {
+  RxList<LibraryPlaylist> _allPlaylists = <LibraryPlaylist>[].obs;
   RxList<String> _selectedItemList = <String>[].obs;
   RxBool _isSelectedAll = false.obs;
 
-  List<PlaylistItem> get allPlaylists => _allPlaylists.value;
+  List<LibraryPlaylist> get allPlaylists => _allPlaylists.value;
 
   List<String> get selectedItemList => _selectedItemList.value;
 
   bool get isSelectedAll => _isSelectedAll.value;
 
-  setList(List<PlaylistItem> list) {
+  setList(List<LibraryPlaylist> list) {
     _allPlaylists.value = list;
   }
 
   addSelectedItem(String selectedPlaylistID) {
-    _selectedItemList.value.add(selectedPlaylistID);
-    update();
+    _selectedItemList.add(selectedPlaylistID);
   }
 
   deleteSelectedItem(String selectedPlaylistID) {
-    _selectedItemList.value.remove(selectedPlaylistID);
-    update();
+    _selectedItemList.remove(selectedPlaylistID);
   }
 
   setIsSelectedAllItems() {

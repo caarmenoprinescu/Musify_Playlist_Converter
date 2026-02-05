@@ -1,21 +1,16 @@
 class AppleSong {
   final List<AppleSongData> data;
 
-  AppleSong({
-    required this.data,
-  });
+  AppleSong({required this.data});
 
   factory AppleSong.fromJson(Map<String, dynamic> json) {
     return AppleSong(
       data: (json['data'] as List<dynamic>)
-          .map((e) => AppleSongData.fromJson(
-        Map<String, dynamic>.from(e),
-      ))
+          .map((e) => AppleSongData.fromJson(Map<String, dynamic>.from(e)))
           .toList(),
     );
   }
 }
-
 
 class AppleSongData {
   final String id;
@@ -46,7 +41,6 @@ class AppleSongData {
     );
   }
 }
-
 
 class AppleSongAttributes {
   final String albumName;
@@ -106,14 +100,12 @@ class AppleSongAttributes {
       isAppleDigitalMaster: json['isAppleDigitalMaster'],
       name: json['name'],
       previews: (json['previews'] as List<dynamic>)
-          .map((e) =>
-          ApplePreview.fromJson(Map<String, dynamic>.from(e)))
+          .map((e) => ApplePreview.fromJson(Map<String, dynamic>.from(e)))
           .toList(),
       artistName: json['artistName'],
     );
   }
 }
-
 
 class AppleArtwork {
   final int width;
@@ -154,16 +146,10 @@ class ApplePlayParams {
   final String id;
   final String kind;
 
-  ApplePlayParams({
-    required this.id,
-    required this.kind,
-  });
+  ApplePlayParams({required this.id, required this.kind});
 
   factory ApplePlayParams.fromJson(Map<String, dynamic> json) {
-    return ApplePlayParams(
-      id: json['id'],
-      kind: json['kind'],
-    );
+    return ApplePlayParams(id: json['id'], kind: json['kind']);
   }
 }
 
@@ -173,21 +159,15 @@ class ApplePreview {
   ApplePreview({required this.url});
 
   factory ApplePreview.fromJson(Map<String, dynamic> json) {
-    return ApplePreview(
-      url: json['url'],
-    );
+    return ApplePreview(url: json['url']);
   }
 }
-
 
 class AppleSongRelationships {
   final AppleRelationship artists;
   final AppleRelationship albums;
 
-  AppleSongRelationships({
-    required this.artists,
-    required this.albums,
-  });
+  AppleSongRelationships({required this.artists, required this.albums});
 
   factory AppleSongRelationships.fromJson(Map<String, dynamic> json) {
     return AppleSongRelationships(
@@ -205,18 +185,15 @@ class AppleRelationship {
   final String href;
   final List<AppleRelationshipData> data;
 
-  AppleRelationship({
-    required this.href,
-    required this.data,
-  });
+  AppleRelationship({required this.href, required this.data});
 
   factory AppleRelationship.fromJson(Map<String, dynamic> json) {
     return AppleRelationship(
       href: json['href'],
       data: (json['data'] as List<dynamic>)
-          .map((e) => AppleRelationshipData.fromJson(
-        Map<String, dynamic>.from(e),
-      ))
+          .map(
+            (e) => AppleRelationshipData.fromJson(Map<String, dynamic>.from(e)),
+          )
           .toList(),
     );
   }
