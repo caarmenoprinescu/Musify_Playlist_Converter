@@ -51,23 +51,23 @@ backend/ – Flask backend handling authentication and API logic
 ## Screenshots
 
 ### Welcome Screen
-![Welcome Screen](images2/screenshots/welcome.PNG)
+![Welcome Screen](frontend/images2/screenshots/welcome.PNG)
 
 ### About Page
-![About Page](images2/screenshots/about.PNG)
+![About Page](frontend/images2/screenshots/about.PNG)
 
 ### Conversion Path Options
-![Path Options](images2/screenshots/path_options.PNG)
+![Path Options](frontend/images2/screenshots/path_options.PNG)
 
 ### Required Permission & Authentication
-![Security](images2/screenshots/security.PNG)
+![Security](frontend/images2/screenshots/security.PNG)
 
 ### Playlist Selection From User's Library
-![Playlist Selection](images2/screenshots/playlists_selection.PNG)
+![Playlist Selection](frontend/images2/screenshots/playlists_selection.PNG)
 
 ### Converting Process
-![Converting Process](images2/screenshots/converting_process.PNG)
+![Converting Process](frontend/images2/screenshots/converting_process.PNG)
 
 ### Conversion Completed
-![Conversion Done](images2/screenshots/done.PNG)
+![Conversion Done](frontend/images2/screenshots/done.PNG)
 
