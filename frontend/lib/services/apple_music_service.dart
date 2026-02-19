@@ -46,7 +46,7 @@ class AppleMusicService {
 
   static Future<String?> fetchDeveloperToken() async {
     const String backendUrl =
-        'http:'; // ip address:5000/apple/developer-token';
+       'http://192.168.100.123:5000/apple/developer-token';
 
     try {
       final response = await http.get(Uri.parse(backendUrl));
@@ -66,7 +66,7 @@ class AppleMusicService {
     required List<String> terms,
     required String developerToken,
   }) async {
-    const String baseUrl = 'http:'; // ip address:5000';
+    const String baseUrl = 'http://192.168.100.123:5000';
 
     final uri = Uri.parse(
       '$baseUrl/apple/search',
@@ -96,7 +96,7 @@ class AppleMusicService {
     required String developerToken,
     required String userToken,
   }) async {
-    const String baseUrl = 'http:'; // ip address:5000';
+    const String baseUrl = 'http://192.168.100.123:5000';
     final uri = Uri.parse('$baseUrl/apple/create-playlist');
     try {
       final response = await http.post(
@@ -136,7 +136,7 @@ class AppleMusicService {
     required String developerToken,
     required String userToken,
   }) async {
-    const String baseUrl = 'http:'; // ip address:5000';
+    const String baseUrl = 'http://192.168.100.123:5000';
     final uri = Uri.parse('$baseUrl/apple/add-tracks');
     try {
       final response = await http.post(
@@ -168,7 +168,7 @@ class AppleMusicService {
     required String developerToken,
     required String userToken,
   }) async {
-    const String baseUrl = 'http:'; // ip address:5000';
+    const String baseUrl = 'http://192.168.100.123:5000';
     final uri = Uri.parse('$baseUrl/apple/add-tracks');
 
     try {
@@ -199,7 +199,7 @@ class AppleMusicService {
     required String developerToken,
     required String userToken,
   }) async {
-    const String baseUrl = 'http:'; // ip address:5000';
+    const String baseUrl = 'http://192.168.100.123:5000';
     final uri = Uri.parse('$baseUrl/apple/get-playlists');
     try {
       final response = await http.get(
@@ -238,7 +238,7 @@ class AppleMusicService {
     required String userToken,
     required String playlistID,
   }) async {
-    const String baseUrl = 'http:'; // ip address:5000';
+    const String baseUrl = 'http://192.168.100.123:5000';
     final uri = Uri.parse('$baseUrl/apple/get-playlist-details/$playlistID');
     try {
       final response = await http.get(

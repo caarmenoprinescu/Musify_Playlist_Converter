@@ -5,7 +5,7 @@ import '../models/spotify/SListPlaylists.dart';
 import '../models/spotify/SPlaylist.dart';
 
 class SpotifyService {
-  final String backendBaseUrl = "http:' // ip address:5000";
+  final String backendBaseUrl = "http://192.168.100.123:5000";
   String? accessToken;
   String? refreshToken;
 

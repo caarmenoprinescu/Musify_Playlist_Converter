@@ -313,50 +313,50 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
 
                   const Spacer(),
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    margin: const EdgeInsets.only(bottom: 40),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.5),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                              color: Colors.white.withValues(alpha: 0.3),
-                            ),
-                          ),
-                          child: const Text(
-                            "EARLY ACCESS",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: 1.5,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        const Text(
-                          "Move your playlists in seconds",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w300,
-                            letterSpacing: 1.5,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  // Container(
+                  //   padding: const EdgeInsets.all(20),
+                  //   margin: const EdgeInsets.only(bottom: 40),
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.white.withValues(alpha: 0.5),
+                  //     borderRadius: BorderRadius.circular(20),
+                  //   ),
+                  //   child: Column(
+                  //     children: [
+                  //       Container(
+                  //         padding: const EdgeInsets.symmetric(
+                  //           horizontal: 12,
+                  //           vertical: 4,
+                  //         ),
+                  //         decoration: BoxDecoration(
+                  //           color: Colors.white.withValues(alpha: 0.2),
+                  //           borderRadius: BorderRadius.circular(20),
+                  //           border: Border.all(
+                  //             color: Colors.white.withValues(alpha: 0.3),
+                  //           ),
+                  //         ),
+                  //         child: const Text(
+                  //           "EARLY ACCESS",
+                  //           style: TextStyle(
+                  //             color: Colors.white,
+                  //             fontSize: 10,
+                  //             fontWeight: FontWeight.w800,
+                  //             letterSpacing: 1.5,
+                  //           ),
+                  //         ),
+                  //       ),
+                  //       const SizedBox(height: 12),
+                  //       const Text(
+                  //         "Move your playlists in seconds",
+                  //         style: TextStyle(
+                  //           color: Colors.white,
+                  //           fontSize: 16,
+                  //           fontWeight: FontWeight.w300,
+                  //           letterSpacing: 1.5,
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 40,
