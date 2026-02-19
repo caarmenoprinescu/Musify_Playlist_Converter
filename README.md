@@ -50,24 +50,18 @@ backend/ – Flask backend handling authentication and API logic
 
 ## Screenshots
 
-### Welcome Screen
-![Welcome Screen](frontend/images2/screenshots/welcome.PNG)
+<p align="center">
+  <img src="frontend/images2/screenshots/welcome.PNG" alt="Welcome screen" width="30%" />
+  <img src="frontend/images2/screenshots/about.PNG" alt="About page" width="30%" />
+  <img src="frontend/images2/screenshots/path_options.PNG" alt="Conversion path options" width="30%" />
+</p>
 
-### About Page
-![About Page](frontend/images2/screenshots/about.PNG)
+<p align="center">
+  <img src="frontend/images2/screenshots/security.PNG" alt="Authentication and permissions screen" width="30%" />
+  <img src="frontend/images2/screenshots/playlists_selection.PNG" alt="Playlist selection from user's library" width="30%" />
+  <img src="frontend/images2/screenshots/converting_process.PNG" alt="Playlist converting process" width="30%" />
+</p>
 
-### Conversion Path Options
-![Path Options](frontend/images2/screenshots/path_options.PNG)
-
-### Required Permission & Authentication
-![Security](frontend/images2/screenshots/security.PNG)
-
-### Playlist Selection From User's Library
-![Playlist Selection](frontend/images2/screenshots/playlists_selection.PNG)
-
-### Converting Process
-![Converting Process](frontend/images2/screenshots/converting_process.PNG)
-
-### Conversion Completed
-![Conversion Done](frontend/images2/screenshots/done.PNG)
-
+<p align="center">
+  <img src="frontend/images2/screenshots/done.PNG" alt="Conversion completed screen" width="30%" />
+</p>
